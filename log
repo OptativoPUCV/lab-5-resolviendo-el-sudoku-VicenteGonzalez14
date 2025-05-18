@@ -17,3 +17,15 @@ sudoku.c:155:5: note: previous definition of 'main' was here
      ^~~~
 cc1.exe: all warnings being treated as errors
 3f0e54c
+Sun, May 18, 2025 10:48:49 AM: 
+ sudoku.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+Compilation failed
+test.c:245:5: error: redefinition of 'main'
+ int main( int argc, char *argv[] ) {
+     ^~~~
+In file included from test.c:5:0:
+sudoku.c:155:5: note: previous definition of 'main' was here
+ int main( int argc, char *argv[] ){
+     ^~~~
+f57e493

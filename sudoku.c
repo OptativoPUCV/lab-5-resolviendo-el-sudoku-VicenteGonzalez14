@@ -44,7 +44,7 @@ void print_node(Node* n){
 }
 
 int is_valid(Node* n){
-    int i, j, k, l;
+    int i, j, k;
     int seen[10];
 
     // Validar filas
@@ -145,7 +145,7 @@ Node* DFS(Node* initial, int* cont){
             push(stack, adjNode);
             adjNode = next(adj);
         }
-    }
+    } 
 
     return NULL;
 }
