@@ -44,28 +44,114 @@ void print_node(Node* n){
 }
 
 int is_valid(Node* n){
+    int i, j, k, l;
+    int seen[10];
+
+    // Validar filas
+    for(i = 0; i < 9; i++){
+        for(k = 1; k <= 9; k++) seen[k] = 0;
+        for(j = 0; j < 9; j++){
+            int val = n->sudo[i][j];
+            if(val == 0) continue;
+            if(seen[val]) return 0;
+            seen[val] = 1;
+        }
+    }
+
+    // Validar columnas
+    for(j = 0; j < 9; j++){
+        for(k = 1; k <= 9; k++) seen[k] = 0;
+        for(i = 0; i < 9; i++){
+            int val = n->sudo[i][j];
+            if(val == 0) continue;
+            if(seen[val]) return 0;
+            seen[val] = 1;
+        }
+    }
+
+    // Validar subcuadros de 3x3
+    for(i = 0; i < 9; i += 3){
+        for(j = 0; j < 9; j += 3){
+            for(k = 1; k <= 9; k++) seen[k] = 0;
+            for(int x = i; x < i + 3; x++){
+                for(int y = j; y < j + 3; y++){
+                    int val = n->sudo[x][y];
+                    if(val == 0) continue;
+                    if(seen[val]) return 0;
+                    seen[val] = 1;
+                }
+            }
+        }
+    }
 
     return 1;
 }
 
 
 List* get_adj_nodes(Node* n){
-    List* list=createList();
+    List* list = createList();
+    int i, j;
+    int found = 0;
+
+    // Buscar la primera celda vacía (igual a 0)
+    for(i = 0; i < 9 && !found; i++){
+        for(j = 0; j < 9 && !found; j++){
+            if(n->sudo[i][j] == 0){
+                found = 1; // Salimos del bucle una vez encontrada
+                i--; j--; // Corrección por el último incremento en el for
+            }
+        }
+    }
+
+    // Si no se encontró casilla vacía, no se generan nodos
+    if(!found) return list;
+
+    // Generar 9 nodos adyacentes, con valores del 1 al 9 en la casilla vacía
+    for(int val = 1; val <= 9; val++){
+        Node* newNode = copy(n);
+        newNode->sudo[i][j] = val;
+        pushBack(list, newNode); // Agregar a la lista
+    }
+
     return list;
 }
 
 
 int is_final(Node* n){
-    return 0;
+    for(int i = 0; i < 9; i++){
+        for(int j = 0; j < 9; j++){
+            if(n->sudo[i][j] == 0)
+                return 0;
+        }
+    }
+    return 1;
 }
 
 Node* DFS(Node* initial, int* cont){
-  return NULL;
+    Stack* stack = createStack(); // Debes tener una pila si estás usando stack.h, o usa List como stack
+    push(stack, initial);
+
+    while(!is_empty(stack)){
+        Node* n = top(stack); pop(stack);
+        (*cont)++;
+
+        if(!is_valid(n)) continue;
+
+        if(is_final(n)) return n;
+
+        List* adj = get_adj_nodes(n);
+        Node* adjNode = first(adj);
+        while(adjNode != NULL){
+            push(stack, adjNode);
+            adjNode = next(adj);
+        }
+    }
+
+    return NULL;
 }
 
 
 
-/*
 int main( int argc, char *argv[] ){
 
   Node* initial= read_file("s12a.txt");;
@@ -76,4 +162,4 @@ int main( int argc, char *argv[] ){
   print_node(final);
 
   return 0;
-}*/
+}
