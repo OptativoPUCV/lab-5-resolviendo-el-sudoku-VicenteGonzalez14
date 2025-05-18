@@ -72,8 +72,8 @@ int is_valid(Node* n){
     for(int k = 0; k < 9; k++){
         for(int i = 1; i <= 9; i++) seen[i] = 0;
         for(int p = 0; p < 9; p++){
-            int x = 3 * (k / 3) + (p / 3);  // fila dentro de submatriz
-            int y = 3 * (k % 3) + (p % 3);  // columna dentro de submatriz
+            int x = 3 * (k / 3) + (p / 3);  
+            int y = 3 * (k % 3) + (p % 3);  
             int val = n->sudo[x][y];
             if(val == 0) continue;
             if(seen[val]) return 0;
@@ -96,12 +96,12 @@ List* get_adj_nodes(Node* n){
         for(j = 0; j < 9 && !found; j++){
             if(n->sudo[i][j] == 0){
                 found = 1;
-                i--; j--; // corregimos el avance extra del for
+                i--; j--; 
             }
         }
     }
 
-    // Si no se encontró celda vacía, retornamos lista vacía
+   
     if(!found) return list;
 
     // Intentar colocar los valores del 1 al 9
@@ -110,9 +110,9 @@ List* get_adj_nodes(Node* n){
         newNode->sudo[i][j] = val;
 
         if (is_valid(newNode)) {
-            pushBack(list, newNode);  // Solo agregamos si es válido
+            pushBack(list, newNode); 
         } else {
-            free(newNode);            // Liberamos si no es válido
+            free(newNode);           
         }
     }
 
@@ -131,12 +131,12 @@ int is_final(Node* n){
 }
 
 Node* DFS(Node* n, int* cont){
-    List* stack = createList();        // usamos lista como pila
-    pushFront(stack, n);               // insertar nodo inicial
+    List* stack = createList();        
+    pushFront(stack, n);               
 
-    while (first(stack) != NULL){      // mientras la pila no esté vacía
-        Node* current = first(stack);  // obtenemos el primer nodo
-        popFront(stack);               // lo sacamos
+    while (first(stack) != NULL){      
+        Node* current = first(stack);  
+        popFront(stack);               
         (*cont)++;
 
         if (is_final(current))         // si es estado final, retornamos
@@ -152,10 +152,10 @@ Node* DFS(Node* n, int* cont){
             }
         }
 
-        free(current);  // liberamos memoria del nodo actual
+        free(current);  
     }
 
-    return NULL;  // si no se encontró solución
+    return NULL; 
 }
 
 /* 
