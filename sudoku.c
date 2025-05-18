@@ -153,7 +153,7 @@ Node* DFS(Node* n, int* cont){
     return NULL;  // si no se encontró solución
 }
 
-
+/* 
 int main( int argc, char *argv[] ){
 
   Node* initial= read_file("s12a.txt");;
@@ -165,3 +165,4 @@ int main( int argc, char *argv[] ){
 
   return 0;
 }
+*/
