@@ -95,20 +95,25 @@ List* get_adj_nodes(Node* n){
     for(i = 0; i < 9 && !found; i++){
         for(j = 0; j < 9 && !found; j++){
             if(n->sudo[i][j] == 0){
-                found = 1; // Salimos del bucle una vez encontrada
-                i--; j--; // Corrección por el último incremento en el for
+                found = 1;
+                i--; j--; // corregimos el avance extra del for
             }
         }
     }
 
-    // Si no se encontró casilla vacía, no se generan nodos
+    // Si no se encontró celda vacía, retornamos lista vacía
     if(!found) return list;
 
-    // Generar 9 nodos adyacentes, con valores del 1 al 9 en la casilla vacía
+    // Intentar colocar los valores del 1 al 9
     for(int val = 1; val <= 9; val++){
         Node* newNode = copy(n);
         newNode->sudo[i][j] = val;
-        pushBack(list, newNode); // Agregar a la lista
+
+        if (is_valid(newNode)) {
+            pushBack(list, newNode);  // Solo agregamos si es válido
+        } else {
+            free(newNode);            // Liberamos si no es válido
+        }
     }
 
     return list;
