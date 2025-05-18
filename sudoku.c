@@ -44,13 +44,12 @@ void print_node(Node* n){
 }
 
 int is_valid(Node* n){
-    int i, j, k;
     int seen[10];
 
     // Validar filas
-    for(i = 0; i < 9; i++){
-        for(k = 1; k <= 9; k++) seen[k] = 0;
-        for(j = 0; j < 9; j++){
+    for(int i = 0; i < 9; i++){
+        for(int k = 1; k <= 9; k++) seen[k] = 0;
+        for(int j = 0; j < 9; j++){
             int val = n->sudo[i][j];
             if(val == 0) continue;
             if(seen[val]) return 0;
@@ -59,9 +58,9 @@ int is_valid(Node* n){
     }
 
     // Validar columnas
-    for(j = 0; j < 9; j++){
-        for(k = 1; k <= 9; k++) seen[k] = 0;
-        for(i = 0; i < 9; i++){
+    for(int j = 0; j < 9; j++){
+        for(int k = 1; k <= 9; k++) seen[k] = 0;
+        for(int i = 0; i < 9; i++){
             int val = n->sudo[i][j];
             if(val == 0) continue;
             if(seen[val]) return 0;
@@ -69,23 +68,22 @@ int is_valid(Node* n){
         }
     }
 
-    // Validar subcuadros de 3x3
-    for(i = 0; i < 9; i += 3){
-        for(j = 0; j < 9; j += 3){
-            for(k = 1; k <= 9; k++) seen[k] = 0;
-            for(int x = i; x < i + 3; x++){
-                for(int y = j; y < j + 3; y++){
-                    int val = n->sudo[x][y];
-                    if(val == 0) continue;
-                    if(seen[val]) return 0;
-                    seen[val] = 1;
-                }
-            }
+    // Validar submatrices 3x3 usando k y p
+    for(int k = 0; k < 9; k++){
+        for(int i = 1; i <= 9; i++) seen[i] = 0;
+        for(int p = 0; p < 9; p++){
+            int x = 3 * (k / 3) + (p / 3);  // fila dentro de submatriz
+            int y = 3 * (k % 3) + (p % 3);  // columna dentro de submatriz
+            int val = n->sudo[x][y];
+            if(val == 0) continue;
+            if(seen[val]) return 0;
+            seen[val] = 1;
         }
     }
 
-    return 1;
+    return 1; // Si pasa todas las validaciones
 }
+
 
 
 List* get_adj_nodes(Node* n){
