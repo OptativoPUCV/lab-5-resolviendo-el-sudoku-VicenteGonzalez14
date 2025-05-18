@@ -127,29 +127,33 @@ int is_final(Node* n){
     return 1;
 }
 
-Node* DFS(Node* initial, int* cont){
-    Stack* stack = createStack(); // Debes tener una pila si estás usando stack.h, o usa List como stack
-    push(stack, initial);
+Node* DFS(Node* n, int* cont){
+    List* stack = createList();        // usamos lista como pila
+    pushFront(stack, n);               // insertar nodo inicial
 
-    while(!is_empty(stack)){
-        Node* n = top(stack); pop(stack);
+    while (first(stack) != NULL){      // mientras la pila no esté vacía
+        Node* current = first(stack);  // obtenemos el primer nodo
+        popFront(stack);               // lo sacamos
         (*cont)++;
 
-        if(!is_valid(n)) continue;
+        if (is_final(current))         // si es estado final, retornamos
+            return current;
 
-        if(is_final(n)) return n;
+        if (is_valid(current)){        // si es válido, expandimos
+            List* adj = get_adj_nodes(current);
+            Node* adjNode = first(adj);
 
-        List* adj = get_adj_nodes(n);
-        Node* adjNode = first(adj);
-        while(adjNode != NULL){
-            push(stack, adjNode);
-            adjNode = next(adj);
+            while (adjNode != NULL){
+                pushFront(stack, adjNode);   // agregamos al stack (como pila)
+                adjNode = next(adj);
+            }
         }
-    } 
 
-    return NULL;
+        free(current);  // liberamos memoria del nodo actual
+    }
+
+    return NULL;  // si no se encontró solución
 }
-
 
 
 int main( int argc, char *argv[] ){
